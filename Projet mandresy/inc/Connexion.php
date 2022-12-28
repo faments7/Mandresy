@@ -5,7 +5,7 @@
     try {
         $dbh= new PDO($dsn,$user,$pass);
     }catch (PDOException $e) {
-        print "Erreur ! :" . $e->getMessage();
+        print "Erreur ! :". $e->getMessage();
         die();
     }
 ?>

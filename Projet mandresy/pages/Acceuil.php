@@ -36,11 +36,11 @@
         <h5 class="card-title">Entrer la nouvelle ville</h5>
         <div class="row justify-content-around">
             <div class="col-5" id="ville_avec_region">
-                <form action="#">
+                <form action="../inc/Traitement.php" method="POST">
                     <div class="form-floating mb-3">
-                        <input type="email" class="form-control" id="floatingInput" placeholder="Nouvelle ville">
-                    </div>
-                    <select class="form-select form-select-lg mb-3">
+                        <input type="email" class="form-control" id="floatingInput" name="nomVille" placeholder="Nouvelle ville">
+                    </div> 
+                    <select class="form-select form-select-lg mb-3" name="region">
                         <option selected>Region</option>
                         <option value="1">Analamanga</option>
                         <option value="2">Itasy</option>
