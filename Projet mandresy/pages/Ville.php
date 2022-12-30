@@ -10,8 +10,8 @@ $tabVille = getAllVille($dbh);
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="../assets/css/Ville.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/Ville.css">
     <script src="../assets/jquery-ui-1.12.1/external/jquery/jquery.js"></script>
     <link rel="stylesheet" href="../assets/bootstrap-4.4.1-dist/css/bootstrap.css">
     <link rel="stylesheet" href="../assets/bootstrap-4.4.1-dist/css/bootstrap-grid.min.css">
@@ -22,28 +22,29 @@ $tabVille = getAllVille($dbh);
         <div id="navigation">
             <div id="nav_bar">
             <nav class="nav nav-pills nav-fill">
-                <a class="nav-link" href="#">&Eacute;venement</a>
-                <a class="nav-link active" aria-current="page" href="#">Ville</a>
+                <a class="nav-link" href="Evenement.php">&Eacute;venement</a>
+                <a class="nav-link active" aria-current="page" href="Ville.php">Ville</a>
                 <a class="nav-link" href="#">Artiste</a>
             </nav>
             </div>
         </div>
     </header>
     <div class="card text-center">
-    <div class="card-header">
-        <ul class="nav nav-tabs card-header-tabs">
-        <li class="nav-item">
-            <a class="nav-link active" id="nouvelle_ville" aria-current="true" href="#" onclick="showNewTown();">Nouvelle ville</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="toute_les_villes" href="#" onclick="showAllTown();">Toutes les villes</a>
-        </li>
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" id="nouvelle_ville" aria-current="true" href="#" onclick="showNewTown();">Nouvelle ville</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="toute_les_villes" href="#" onclick="showAllTown();">Toutes les villes</a>
+            </li>
+        </div>
     </div>
     <div class="card-body" id="new_town_card">
         <h5 class="card-title">Entrer la nouvelle ville</h5>
         <div class="row justify-content-around">
             <div class="col-5" id="ville_avec_region">
-                <form action="../inc/Traitement.php" method="get">
+                <form action="../inc/TraitementVille.php" method="get">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="floatingInput" name="nomVille" placeholder="Nouvelle ville">
                     </div> 
@@ -60,7 +61,7 @@ $tabVille = getAllVille($dbh);
                 </form>
             </div>
             <div class="col-5" id="ville_sans_region">
-                <form action="../inc/Traitement.php" method="get">
+                <form action="../inc/TraitementVille.php" method="get">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="floatingInput" name="nomVille" placeholder="Nouvelle ville">
                     </div>
