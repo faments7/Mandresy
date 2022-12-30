@@ -1,0 +1,5 @@
+div#container.col-sm-3 {
+    height: 400px;
+    border: 1px solid;
+    display: flex;
+}    

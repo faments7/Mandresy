@@ -38,8 +38,8 @@ nom VARCHAR(30) NOT NULL);
 CREATE TABLE ville (
 idVille  SERIAL PRIMARY KEY NOT NULL,
 nom VARCHAR(50) NOT NULL,
-latitude  DECIMAL NOT NULL,
-longitude  DECIMAL NOT NULL,
+latitude  DECIMAL ,
+longitude  DECIMAL ,
 idRegion  SERIAL NOT NULL,
 FOREIGN KEY (idRegion) REFERENCES region(idRegion)
 );
@@ -49,14 +49,32 @@ idStatus SERIAL PRIMARY KEY NOT NULL,
 nom VARCHAR(30) NOT NULL
 );
 
+CREATE TABLE datePrevue(
+idDate SERIAL PRIMARY KEY NOT NULL,
+datePrevue DATE
+);
+
 CREATE TABLE evenement (
 idEvenement SERIAL PRIMARY KEY NOT NULL,
 idVille  SERIAL NOT NULL,
-datePrevue  DATE NOT NULL,
-observation  VARCHAR(100) NOT NULL,
+observation  VARCHAR(100),
 idArtiste SERIAL NOT NULL,
 idStatue  SERIAL NOT NULL,
+idDate SERIAL NOT NULL,
 FOREIGN KEY (idVille) REFERENCES ville(idVille),
 FOREIGN KEY (idArtiste) REFERENCES artiste(idArtiste),
-FOREIGN KEY (idStatue) REFERENCES status(idStatus)
+FOREIGN KEY (idStatue) REFERENCES status(idStatus),
+FOREIGN KEY (idDate) REFERENCES datePrevue(idDate)
 );
+
+INSERT INTO datePrevue (dateprevue) VALUES('2023-08-18');
+INSERT INTO datePrevue (dateprevue) VALUES('2023-08-19');
+INSERT INTO datePrevue (dateprevue) VALUES('2023-08-20');
+
+INSERT INTO status (nom) VALUES ('prevue');
+INSERT INTO status (nom) VALUES ('confirmer');
+
+::reinitialisation artiste
+DROP TABLE evenement; 
+DROP TABLE ville;
+DROP TABLE region;
