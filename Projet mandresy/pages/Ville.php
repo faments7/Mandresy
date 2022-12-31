@@ -24,7 +24,7 @@ $tabVille = getAllVille($dbh);
             <nav class="nav nav-pills nav-fill">
                 <a class="nav-link" href="Evenement.php">&Eacute;venement</a>
                 <a class="nav-link active" aria-current="page" href="Ville.php">Ville</a>
-                <a class="nav-link" href="#">Artiste</a>
+                <a class="nav-link" href="Artiste.php">Artiste</a>
             </nav>
             </div>
         </div>
@@ -81,7 +81,12 @@ $tabVille = getAllVille($dbh);
             <h1><?php echo $tabRegion[$i]['nom']; ?></h1>
                 <?php for ($j=0; $j < count($tabVille) ; $j++) { ?> 
                 <?php if ($tabVille[$i]['idregion'] == $tabRegion[$i]['idregion']) { ?>
-                    <h5><?php echo $tabVille[$i]['nomTown'] ?></h5>
+                    <div class="row justify-content-center">
+                        <h5><?php echo $tabVille[$j]['nomTown'] ?></h5>
+                    </div>
+                    <div class="row justify-content-center">
+                        <a href="../inc/SuppressionVille.php?nomTown=<?php echo $tabVille[$i]['nomTown'] ?>">Suprimer</a>
+                    </div>
                 <?php } ?>
             </div>
         <?php } 

@@ -24,7 +24,7 @@ $tabVille = getAllVille($dbh);
             <nav class="nav nav-pills nav-fill">
                 <a class="nav-link active" aria-current="page" href="Evenement.php">&Eacute;venement</a>
                 <a class="nav-link" href="Ville.php">Ville</a>
-                <a class="nav-link" href="#">Artiste</a>
+                <a class="nav-link" href="Artiste.php">Artiste</a>
             </nav>
             </div>
         </div>
@@ -49,7 +49,11 @@ $tabVille = getAllVille($dbh);
                 </div>
             </div>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button type="button" class="btn btn-outline-primary">Primary</button>
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="InscriptionEvent.php">Ajouter</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

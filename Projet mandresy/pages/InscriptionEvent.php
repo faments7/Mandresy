@@ -16,7 +16,7 @@
             <nav class="nav nav-pills nav-fill">
                 <a class="nav-link active" aria-current="page" href="Evenement.php">&Eacute;venement</a>
                 <a class="nav-link" href="Ville.php">Ville</a>
-                <a class="nav-link" href="#">Artiste</a>
+                <a class="nav-link" href="Artiste.php">Artiste</a>
             </nav>
             </div>
         </div>

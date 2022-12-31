@@ -13,9 +13,10 @@ DROP TABLE IF EXISTS evenement;
 CREATE TABLE artiste  (
 idArtiste  SERIAL PRIMARY KEY NOT NULL,
 nom VARCHAR(50) NOT NULL,
-type VARCHAR(30) NOT NULL,
+typeArtiste VARCHAR(30) NOT NULL,
 contact  NUMERIC NOT NULL,
-facebook  VARCHAR(50) NOT NULL
+facebook  VARCHAR(50) NOT NULL,
+photoArt VARCHAR(200)
 );
 
 CREATE TABLE tag ( 
@@ -74,7 +75,21 @@ INSERT INTO datePrevue (dateprevue) VALUES('2023-08-20');
 INSERT INTO status (nom) VALUES ('prevue');
 INSERT INTO status (nom) VALUES ('confirmer');
 
-::reinitialisation artiste
+INSERT INTO tag (nomtag) VALUES ('jeune');
+INSERT INTO tag (nomtag) VALUES ('nostalgie');
+INSERT INTO tag (nomtag) VALUES ('gospel');
+INSERT INTO tag (nomtag) VALUES ('choral');
+INSERT INTO tag (nomtag) VALUES ('pop');
+INSERT INTO tag (nomtag) VALUES ('rock');
+INSERT INTO tag (nomtag) VALUES ('rap');
+
+::reinitialisation ville
 DROP TABLE evenement; 
 DROP TABLE ville;
 DROP TABLE region;
+
+::reinitilisation artiste
+DROP TABLE tagartiste;
+DROP TABLE tag;
+DROP TABLE evenement;
+DROP TABLE artiste;
