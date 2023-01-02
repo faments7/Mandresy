@@ -3,6 +3,7 @@ include ('../inc/Connexion.php');
 include ('../inc/Fonction.php');
 
 $tagtab = getAllTag($dbh);
+$tabArtiste = getAllArtiste($dbh);
 ?> 
 <!DOCTYPE html>
 <html lang="en">
@@ -75,7 +76,14 @@ $tagtab = getAllTag($dbh);
             </div>
         </div>
         <div class="card-body" id="all_artiste" style="display: none;">
-            <h1>Haloaaaa</h1>
+            <?php for ($i=0; $i < count($tabArtiste) ; $i++) { ?>
+                <div class="row justify-content-center">
+                        <h5><?php echo $tabArtiste[$i]['nomArtiste'] ?></h5>
+                    </div>
+                    <div class="row justify-content-center">
+                        <a href="../inc/SuppressionArtiste.php?nomArtiste=<?php echo $tabArtiste[$i]['nomArtiste'] ?>">Suprimer</a>
+                    </div>
+            <?php } ?>
         </div>
     </div>
     </div>

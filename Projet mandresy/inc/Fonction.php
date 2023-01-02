@@ -181,8 +181,9 @@
     function deleteArtiste($dbh,$nomArtiste) {
         $allArtiste = getAllArtiste($dbh);
         for ($i=0; $i < count($allArtiste); $i++) { 
-            if ($nomArtiste == $allArtiste[$i]['nomTown']) {
-                $sqlArtiste = "DELETE FROM ville WHERE nom = '$nomArtiste";
+            if ($nomArtiste == $allArtiste[$i]['nomArtiste']) {
+                $sqlArtiste = "DELETE FROM ville WHERE nom = '$nomArtiste'";
+                echo $sqlArtiste;
                 try {
                     $dbh->prepare($sqlArtiste);
                     $dbh->exec($sqlArtiste);
@@ -197,8 +198,136 @@
 
     }
 
-    function newEvenement($dbh){
+    function getAllDate($dbh) {
+        $sqlDate = "SELECT * FROM datePrevue ";
+        $allDate = array();
+        try {
+            $resultat = $dbh->query($sqlDate);
+            $resultat->setFetchMode(PDO::FETCH_OBJ);
+        } catch (PDOException $pe) {
+            echo $pe;
+        }
+        $i = 0;
+        while($ligne = $resultat->fetch()) {
+            $idDate = $ligne->iddate;
+            $datePrevue = $ligne->dateprevue;
 
+            $allDate[$i]['iddate'] = $idDate;
+            $allDate[$i]['dateprevue'] = $datePrevue;
+
+            $i++;
+        }
+        return $allDate;
+    }
+
+    // Fonction pour les evenements
+    function getIdDate($dbh,$datechoisie) {
+        $allDate = getallDate($dbh);
+        for ($i=0; $i < count($allDate); $i++) { 
+            if ($datechoisie == $allDate[$i]['dateprevue']) {
+                $idDatePrevue = $allDate[$i]['iddate'];
+            } else {
+                echo "Date ne faisant pas partie des dates de l'evenement";
+            }
+        }
+        return $idDatePrevue;
+    }
+
+    function getIdVille($dbh,$nomTown) {
+        $allVille = getAllVille($dbh);
+        for ($i=0; $i < count($allVille); $i++) { 
+            if ($nomTown == $allVille[$i]['nomTown']) {
+                $idVilleChoisie = $allVille[$i]['idville'];
+            } else {
+                echo "La ville ne fait pas partie de l'evenement";
+            }
+        }
+        return $idVilleChoisie;
+    }
+
+    function getIdArtiste($dbh,$artistechoisie) {
+        $allArtiste = getAllArtiste($dbh);
+        for ($i=0; $i < count($allArtiste); $i++) { 
+            if ($artistechoisie == $allArtiste[$i]['nomArtiste']) {
+                $idArtistechoisie = $allArtiste[$i]['idArtiste'];
+            } else {
+                echo "cette artiste ne participe pas a l'evenement ";
+            }
+        }
+        return $idArtistechoisie;
+    }
+
+    function newEvenement($dbh,$dateChoisie,$villeChoisie,$artisteChoisie){
+        $idDate = getIdDate($dbh,$dateChoisie);
+        $idVille = getIdVille($dbh,$villeChoisie);
+        $idArtiste = getIdArtiste($dbh,$artisteChoisie);
+
+        $sqlEvent = "INSERT INTO evenement (iddate,idville,idartiste,idstatue) VALUES (".$idDate.",".$idVille.",".$idArtiste.",'0');";
+        echo $sqlEvent;
+        try {
+            $dbh->prepare($sqlEvent);
+            $dbh->exec($sqlEvent);
+        } catch (PDOException $pe) {
+            echo $pe;
+        }
+    }
+
+    function getAllEvenement($dbh) {
+        $sqlEvent = "SELECT * FROM evenement";
+        $allEvenement = array();
+
+        return $allEvenement;
+    }
+
+    function changeValidation($dbh,$idEvenement) {
+        $allEvenement = getAllEvenement($dbh);
+        for ($i=0; $i < count($allEvenement); $i++) { 
+            if ($idEvenement == $allEvenement[$i]['idevenement']) {
+                $idEventchoisie = $idEvenement;
+            }
+        }
+        $sqlChange = "UPDATE evenement SET idstatus = '1' WHERE idevenement = ".$idEventchoisie."";
+        try {
+            $dbh->prepare($sqlChange);
+            $dbh->exec($sqlChange);
+        } catch (PDOException $pe) {
+            echo $pe;
+        }
+    }
+
+    function deleteEvenement($dbh,$idEvenement) {
+        $allEvenement = getAllEvenement($dbh);
+        for ($i=0; $i < count($allEvenement); $i++) { 
+            if ($idEvenement == $allEvenement[$i]['idevenement']) { 
+                $sqldeleteEvent = "DELETE FROM evenement WHERE idevenement = '.$idEvenement.';";
+            }
+        }
+        try {
+            $dbh->prepare($sqldeleteEvent);
+            $dbh->exec($sqldeleteEvent);
+        } catch (PDOException $pe) {
+            echo $pe;
+        }
+    }
+
+    function updateEvenement($dbh,$idEvenement,$newTownSelected,$newArtisteSelected,$newDateSelected) {
+        $allEvenement = getAllEvenement($dbh);
+        for ($i=0; $i < count($allEvenement); $i++) { 
+            if ($idEvenement == $allEvenement[$i]['idevenement']) {
+                $idEventchoisie = $idEvenement; 
+            }
+        }
+        $idnewDate = getIdDate($dbh,$newDateSelected);
+        $idnewVille = getIdVille($dbh,$newTownSelected);
+        $idnewArtiste = getIdArtiste($dbh,$newArtisteSelected);
+
+        $sqlUpdateEvent = "UPDATE evenement SET iddate = '.$idnewDate.', idville = '.$idnewVille.', idartiste = '.$idnewArtiste.' WHERE idevenement = '.$idEventchoisie.'";
+        try {
+            $dbh->prepare($sqlUpdateEvent);
+            $dbh->exec($sqlUpdateEvent);
+        } catch (PDOException $pe) {
+            echo $pe;
+        }
     }
 
 ?>
