@@ -41,10 +41,20 @@ $tabVille = getAllVille($dbh);
         </div>
     </div>
     <div class="card-body" id="new_town_card">
+        <form action="../inc/traitement/Recherche.php" method="get">
+            <input type="text" name="keywords" value="" placeholder="Mots-clés">
+            <input type="submit" name="validation" placeholder="Rechercher">
+        </form>
+        <?php $afficher = "non";
+         if ($afficher == "oui") { ?>
+            <div id="resultat">
+                coucou
+            </div>
+        <?php } ?>
         <h5 class="card-title">Entrer la nouvelle ville</h5>
         <div class="row justify-content-around">
             <div class="col-5" id="ville_avec_region">
-                <form action="../inc/TraitementVille.php" method="get">
+                <form action="../inc/traitement/AjouterVille.php" method="get">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="floatingInput" name="nomVille" placeholder="Nouvelle ville">
                     </div> 
@@ -61,7 +71,7 @@ $tabVille = getAllVille($dbh);
                 </form>
             </div>
             <div class="col-5" id="ville_sans_region">
-                <form action="../inc/TraitementVille.php" method="get">
+                <form action="../inc/traitement/AjouterVille.php" method="get">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="floatingInput" name="nomVille" placeholder="Nouvelle ville">
                     </div>
@@ -80,38 +90,20 @@ $tabVille = getAllVille($dbh);
         <?php for ($i=0; $i < count($tabRegion) ; $i++) { ?>
             <h1><?php echo $tabRegion[$i]['nom']; ?></h1>
                 <?php for ($j=0; $j < count($tabVille) ; $j++) { ?> 
-                <?php if ($tabVille[$i]['idregion'] == $tabRegion[$i]['idregion']) { ?>
+                <?php if ($tabVille[$j]['idregion'] == $tabRegion[$i]['idregion']) { ?>
                     <div class="row justify-content-center">
                         <h5><?php echo $tabVille[$j]['nomTown'] ?></h5>
                     </div>
                     <div class="row justify-content-center">
-                        <a href="../inc/SuppressionVille.php?nomTown=<?php echo $tabVille[$i]['nomTown'] ?>">Suprimer</a>
+                        <a href="../inc/traitement/SupprimerVille.php?nomTown=<?php echo $tabVille[$i]['nomTown'] ?>">Suprimer</a>
+                    </div>
+                    <div class="row justify-content-center">
+                        <a href="ModificationVille.php?nomTown=<?php echo $tabVille[$i]['nomTown'] ?>&region=<?php echo $tabRegion[$i]['nom'] ?>">Modifier</a>
                     </div>
                 <?php } ?>
             </div>
         <?php } 
         } ?>
-        <!-- <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active" data-bs-interval="10000">
-                    <img src="..." class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item" data-bs-interval="2000">
-                    <img src="..." class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="..." class="d-block w-100" alt="...">
-                </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div> -->
     </div>
 </body>
 </html>

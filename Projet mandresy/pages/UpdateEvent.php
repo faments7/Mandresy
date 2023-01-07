@@ -2,6 +2,9 @@
 include ('../inc/Connexion.php');
 include ('../inc/Fonction.php');
 
+$AncienNom = $_GET['anciennomVille'];
+$AncienObservation = $_GET['observation'];
+
 $tabdate = getAllDate($dbh);
 $tabVille = getAllVille($dbh);
 $tabArtiste = getAllArtiste($dbh);
@@ -30,7 +33,7 @@ $tabArtiste = getAllArtiste($dbh);
         </div>
     </header>
     <div class="card-body" id="new_artiste_card">
-        <h5 class="card-title">Entrer une nouvelle evenement</h5>
+        <h5 class="card-title">Modifier l'évènement localiser à <?php echo $AncienNom ?> </h5>
             <div class="row justify-content-around">
                 <div class="col-5" id="ville_avec_region">
                     <form action="../inc/traitement/AjouterEvent.php" method="get">
@@ -49,7 +52,7 @@ $tabArtiste = getAllArtiste($dbh);
                             </select>
                         </div> 
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="floatingInput" name="observation" placeholder="Observation" required>
+                            <input type="text" class="form-control" id="floatingInput" name="observation" placeholder="<?php echo $AncienObservation ?>" required>
                         </div>
                         <div class="form-floating mb-3">
                             <select class="form-control" name="date">

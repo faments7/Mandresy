@@ -43,7 +43,7 @@ $tabArtiste = getAllArtiste($dbh);
             <h5 class="card-title">Entrer la nouvelle artiste</h5>
             <div class="row justify-content-around">
                 <div class="col-5" id="ville_avec_region">
-                    <form action="../inc/TraitementArtiste.php" method="get">
+                    <form action="../inc/traitement/AjouterArtiste.php" method="get">
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="floatingInput" name="nomArtiste" placeholder="Nom de l'artiste" required>
                         </div> 
@@ -60,7 +60,7 @@ $tabArtiste = getAllArtiste($dbh);
                             <input type="text" class="form-control" id="floatingInput" name="tagArtiste" placeholder="Nouvelle Tag">
                         </div> 
                         <div class="form-floating mb-3">
-                            <input type="file" class="form-control-file" id="floatingInput" accept="image/png, image/jpeg" name="photoArt" required>
+                            <input type="file" class="form-control-file" id="floatingInput" accept="image/png, image/jpeg" name="photoArtiste" required>
                         </div> 
                         <div class="radio">
                             <?php for ($i=0; $i < count($tagtab) ; $i++) { ?>
@@ -81,7 +81,7 @@ $tabArtiste = getAllArtiste($dbh);
                         <h5><?php echo $tabArtiste[$i]['nomArtiste'] ?></h5>
                     </div>
                     <div class="row justify-content-center">
-                        <a href="../inc/SuppressionArtiste.php?nomArtiste=<?php echo $tabArtiste[$i]['nomArtiste'] ?>">Suprimer</a>
+                        <a href="../inc/traitement/SupprimerArtiste.php?nomArtiste=<?php echo $tabArtiste[$i]['nomArtiste'] ?>">Suprimer</a>
                     </div>
             <?php } ?>
         </div>

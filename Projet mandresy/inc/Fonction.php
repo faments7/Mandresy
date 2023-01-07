@@ -44,6 +44,7 @@
         return $allRegion;
     }
     
+    //Fonction pour les villes
     function inscription_new_ville($dbh,$nomTown,$newRegion){
         $allRegion = getAllRegion($dbh);
         for ($i=0; $i < count($allRegion)+1 ; $i++) { 
@@ -55,7 +56,6 @@
                     $dbh->prepare($sqlregion);
                     $dbh->exec($sqlregion);
                     $dbh->exec($sqlville);
-                    echo "nouvelle ville et nouvelle region";
                     break;
                 } catch (PDOException $pe) {
                     echo $pe ;
@@ -66,7 +66,6 @@
                 try {
                     $dbh->prepare($sqlville);
                     $dbh->exec($sqlville);
-                    echo "nouvelle ville avec une region deja entrer";
                     break;
                 } catch (PDOException $pe) {
                     echo $pe;
@@ -99,6 +98,34 @@
         return $allVille;
     }  
 
+    function getIdVille($dbh,$nomTown) {
+        $allVille = getAllVille($dbh);
+        for ($i=0; $i < count($allVille); $i++) { 
+            if ($nomTown == $allVille[$i]['nomTown']) {
+                $idVilleChoisie = $allVille[$i]['idville'];
+            }
+        }
+        return $idVilleChoisie;
+    }
+
+    function updateVille($dbh,$nomVille,$nomTown) {
+        $idVille = getIdVille($dbh,$nomVille);
+        $allVille = getAllVille($dbh);
+        for ($i=0; $i < count($allVille); $i++) { 
+            if ($idVille == $allVille[$i]['idville']) {
+                $idnewVille = $idVille;
+            }
+        }
+        $sqlupdateVille = "UPDATE ville SET nom = '$nomTown' WHERE idville = '.$idnewVille.' ";
+        try {
+            $dbh->prepare($sqlupdateVille);
+            $dbh->exec($sqlupdateVille);
+        } catch (PDOException $pe) {
+            echo $pe;
+
+        }
+    }
+
     function deleteVille($dbh,$nomTown) {
         $allVille = getAllVille($dbh);
         for ($i=0; $i < count($allVille); $i++) { 
@@ -115,6 +142,7 @@
         }
     }
 
+    // Fonction por les artistes et tag
     function getAllTag($dbh) {
         $sqlTag = "SELECT * FROM tag";
         $alltag = array();
@@ -137,8 +165,8 @@
         return $alltag;
     }
     
-    function inscription_new_artiste($dbh,$nomArtiste,$typeArtiste,$contactArtiste,$facebookArtiste) {
-        $sqlArtiste = "INSERT INTO artiste (nom,typeartiste,contact,facebook) VALUES ('$nomArtiste','$typeArtiste',".$contactArtiste.",'$facebookArtiste')";
+    function inscription_new_artiste($dbh,$nomArtiste,$typeArtiste,$contactArtiste,$facebookArtiste,$photoArt) {
+        $sqlArtiste = "INSERT INTO artiste (nom,typeartiste,contact,facebook) VALUES ('$nomArtiste','$typeArtiste',".$contactArtiste.",'$facebookArtiste','$photoArt')";
         echo $sqlArtiste;
         try {
             $dbh->prepare($sqlArtiste);
@@ -159,30 +187,87 @@
         }
         $i = 0;
         while ($ligne = $resultat->fetch()) {
-            $photoArtiste = $ligne->photoart;
-            $idArtiste = $ligne->idartiste;
-            $nomArtiste = $ligne->nom;
-            $typeArtiste = $ligne->typeartiste;
-            $contactArtiste = $ligne->contact;
-            $facebookArtiste = $ligne->facebook;
-
-            $allArtiste[$i]['idArtiste'] = $idArtiste;
-            $allArtiste[$i]['photoart'] = $photoArtiste;
-            $allArtiste[$i]['nomArtiste'] = $nomArtiste;
-            $allArtiste[$i]['typeArtiste'] = $typeArtiste;
-            $allArtiste[$i]['contactArtiste'] = $contactArtiste;
-            $allArtiste[$i]['facebookArtiste'] = $facebookArtiste;
+            $allArtiste[$i]['nomArtiste'] = $ligne->nom;
+            $allArtiste[$i]['photoart'] = $ligne->photoart;
+            $allArtiste[$i]['idArtiste'] = $ligne->idartiste;
+            $allArtiste[$i]['contactArtiste'] = $ligne->contact;
+            $allArtiste[$i]['typeArtiste'] = $ligne->typeartiste;
+            $allArtiste[$i]['facebookArtiste'] = $ligne->facebook;
 
             $i++;
         }
         return $allArtiste;
     }
 
+    function getIdArtiste($dbh,$artistechoisie) {
+        $allArtiste = getAllArtiste($dbh);
+        for ($i=0; $i < count($allArtiste); $i++) { 
+            if ($artistechoisie == $allArtiste[$i]['nomArtiste']) {
+                $idArtistechoisie = $allArtiste[$i]['idArtiste'];
+            }
+        }
+        return $idArtistechoisie;
+    }
+
+    function insertTag($dbh,$nomTag) {
+        for ($i=0; $i < count($nomTag); $i++) { 
+            $sqlTag = "INSERT INTO tag(nomtag) VALUES ('$nomTag[$i]['nomTag']') ; " ;
+            try {
+                $dbh->prepare($sqlTag);
+                $dbh->exec($sqlTag);
+            } catch (PDOException $pe) {
+                echo $pe;
+            }
+        }
+    }
+
+    function getIdTag($dbh,$tagchoisie) {
+        $allTag = getAllTag($dbh);
+        for ($i=0; $i < count($allTag); $i++) { 
+            if ($tagchoisie == $allTag[$i]['nomTag']) {
+                $idTagchoisie = $allTag[$i]['idtag'];
+            }
+        }
+        return $idTagchoisie;
+    }
+
+    function insertTagArtiste($dbh,$nomArtiste,$typeArtiste,$contactArtiste,$facebookArtiste,$photoArt,$nomTag) {
+        $newTag = insertTag($dbh,$nomTag);
+        $idnewArtiste = getIdArtiste($dbh,$nomArtiste);
+        $newArtiste = inscription_new_artiste($dbh,$nomArtiste,$typeArtiste,$contactArtiste,$facebookArtiste,$photoArt);
+        for ($i=0; $i < count($nomTag); $i++) { 
+            $idTag = getIdTag($dbh,$nomTag[$i]);
+            $sqlInsertTagArtiste = "INSERT INTO tagartiste (idartiste,idtag) VALUES ('.$idnewArtiste.','.$idTag[$i].'); ";
+            try {
+                $dbh->prepare($sqlInsertTagArtiste);
+                $dbh->exec($sqlInsertTagArtiste);
+            } catch (PDOException $pe) {
+                echo $pe;
+            }
+        }
+    }
+    
+    function updateArtiste($dbh,$nomArtiste,$typeArtiste,$contactArtiste,$facebookArtiste,$photoArtiste) {
+        $allArtiste = getAllArtiste($dbh);
+        for ($i=0; $i < count($allArtiste); $i++) { 
+            if ($nomArtiste == $allArtiste[$i]['nom']) {
+                $nomNewArtiste = $nomArtiste;
+            }
+        }
+        $sqlupdateArtiste = "UPDATE artiste SET nom = '$nomNewArtiste',typeartiste = '$typeArtiste',contact = '$contactArtiste',facebook = '$facebookArtiste',photoart = '$photoArtiste'  WHERE nom = '$nomArtiste' ";
+        try {
+            $dbh->prepare($sqlupdateArtiste);
+            $dbh->exec($sqlupdateArtiste);
+        } catch (PDOException $pe) {
+            echo $pe;
+        }
+    }
+
     function deleteArtiste($dbh,$nomArtiste) {
         $allArtiste = getAllArtiste($dbh);
         for ($i=0; $i < count($allArtiste); $i++) { 
             if ($nomArtiste == $allArtiste[$i]['nomArtiste']) {
-                $sqlArtiste = "DELETE FROM ville WHERE nom = '$nomArtiste'";
+                $sqlArtiste = "DELETE FROM artiste WHERE nom = '$nomArtiste'";
                 echo $sqlArtiste;
                 try {
                     $dbh->prepare($sqlArtiste);
@@ -194,10 +279,7 @@
         }
     }
 
-    function updateArtiste($dbh,$nomArtiste,$typeArtiste,$contactArtiste,$facebookArtiste) {
-
-    }
-
+    //Fonction pour les dates
     function getAllDate($dbh) {
         $sqlDate = "SELECT * FROM datePrevue ";
         $allDate = array();
@@ -220,49 +302,24 @@
         return $allDate;
     }
 
-    // Fonction pour les evenements
     function getIdDate($dbh,$datechoisie) {
         $allDate = getallDate($dbh);
         for ($i=0; $i < count($allDate); $i++) { 
             if ($datechoisie == $allDate[$i]['dateprevue']) {
                 $idDatePrevue = $allDate[$i]['iddate'];
-            } else {
-                echo "Date ne faisant pas partie des dates de l'evenement";
             }
         }
         return $idDatePrevue;
     }
 
-    function getIdVille($dbh,$nomTown) {
-        $allVille = getAllVille($dbh);
-        for ($i=0; $i < count($allVille); $i++) { 
-            if ($nomTown == $allVille[$i]['nomTown']) {
-                $idVilleChoisie = $allVille[$i]['idville'];
-            } else {
-                echo "La ville ne fait pas partie de l'evenement";
-            }
-        }
-        return $idVilleChoisie;
-    }
+    // Fonction pour les evenements
 
-    function getIdArtiste($dbh,$artistechoisie) {
-        $allArtiste = getAllArtiste($dbh);
-        for ($i=0; $i < count($allArtiste); $i++) { 
-            if ($artistechoisie == $allArtiste[$i]['nomArtiste']) {
-                $idArtistechoisie = $allArtiste[$i]['idArtiste'];
-            } else {
-                echo "cette artiste ne participe pas a l'evenement ";
-            }
-        }
-        return $idArtistechoisie;
-    }
-
-    function newEvenement($dbh,$dateChoisie,$villeChoisie,$artisteChoisie){
+    function newEvenement($dbh,$dateChoisie,$villeChoisie,$observation,$artisteChoisie){
         $idDate = getIdDate($dbh,$dateChoisie);
         $idVille = getIdVille($dbh,$villeChoisie);
         $idArtiste = getIdArtiste($dbh,$artisteChoisie);
 
-        $sqlEvent = "INSERT INTO evenement (iddate,idville,idartiste,idstatue) VALUES (".$idDate.",".$idVille.",".$idArtiste.",'0');";
+        $sqlEvent = "INSERT INTO evenement (iddate,idville,observation,idartiste,idstatue) VALUES (".$idDate.",".$idVille.",'$observation',".$idArtiste.",'1');";
         echo $sqlEvent;
         try {
             $dbh->prepare($sqlEvent);
@@ -273,10 +330,45 @@
     }
 
     function getAllEvenement($dbh) {
-        $sqlEvent = "SELECT * FROM evenement";
+        $sqlallEvent = "SELECT * FROM evenement";
         $allEvenement = array();
+        try {
+            $resultat= $dbh->query($sqlallEvent);
+            $resultat->setFetchMode(PDO::FETCH_OBJ);
+        } catch (PDOException $pe) {
+            echo $pe;
+        }
+        $i = 0;
+        while ($ligne = $resultat->fetch()) {
+            $allEvenement[$i]['idevenement'] = $ligne->idevenement;
+            $allEvenement[$i]['idville'] = $ligne->idville;
+            $allEvenement[$i]['observation'] = $ligne->observation;
+            $allEvenement[$i]['idartiste'] = $ligne->idartiste;
+            $allEvenement[$i]['idstatue'] = $ligne->idstatue;
+            $allEvenement[$i]['iddate'] = $ligne->iddate;
 
+            $i++;
+        }
         return $allEvenement;
+    }
+
+    function getAllStatus($dbh) {
+        $sql = "SELECT * FROM status";
+        $allStatus = array();
+        try {
+            $resultat= $dbh->query($sql);
+            $resultat->setFetchMode(PDO::FETCH_OBJ);
+        } catch (PDOException $pe) {
+            echo $pe;
+        }
+        $i = 0;
+        while ($ligne  = $resultat->fetch()) {
+            $allStatus[$i]['idstatus'] = $ligne->idstatus;
+            $allStatus[$i]['nomStatus'] = $ligne->nom;
+
+            $i++;
+        }
+        return $allStatus;
     }
 
     function changeValidation($dbh,$idEvenement) {
@@ -286,7 +378,8 @@
                 $idEventchoisie = $idEvenement;
             }
         }
-        $sqlChange = "UPDATE evenement SET idstatus = '1' WHERE idevenement = ".$idEventchoisie."";
+        $sqlChange = "UPDATE evenement SET idstatue = '2' WHERE idevenement = ".$idEventchoisie."";
+        echo $sqlChange;
         try {
             $dbh->prepare($sqlChange);
             $dbh->exec($sqlChange);
@@ -299,7 +392,8 @@
         $allEvenement = getAllEvenement($dbh);
         for ($i=0; $i < count($allEvenement); $i++) { 
             if ($idEvenement == $allEvenement[$i]['idevenement']) { 
-                $sqldeleteEvent = "DELETE FROM evenement WHERE idevenement = '.$idEvenement.';";
+                $sqldeleteEvent = "DELETE FROM evenement WHERE idevenement = '$idEvenement';";
+                echo $sqldeleteEvent;
             }
         }
         try {
@@ -328,6 +422,29 @@
         } catch (PDOException $pe) {
             echo $pe;
         }
+    }
+
+    function RechercheVille($dbh,$keywords,$valider) {
+        $allVille = getAllVille($dbh);
+        if (isset($valider) && !empty(trim($keywords))) {
+            for ($i=0; $i < count($allVille) ; $i++) { 
+                if ('%$keywords%' == $allVille[$i]['nomTown']) {
+                    $sql = "SELECT nom FROM ville where nom LIKE '%$keywords%'";
+                    try {
+                        $resultat = $dbh->query($sql);
+                        $resultat->setFetchMode(PDO::FETCH_OBJ);
+                        $res = $resultat->fetchAll();
+                    } catch (PDOException $pe) {
+                        echo $pe;
+                    }
+                    
+                }
+            }
+        }
+    }
+
+    function Recherche($dbh,$keywords,$valider){
+        RechercheVille($dbh,$keywords,$valider);
     }
 
 ?>
